@@ -10,26 +10,18 @@ import AppKit
 
 @NSApplicationMain final class AppDelegate: NSObject, NSApplicationDelegate {
 
-	// MARK: - Properties
-
-	private var timer: Timer?
-
-
 	// MARK: - NSApplicationDelegate
 
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
-		timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
-		fire()
+		NSWorkspace.shared().notificationCenter.addObserver(self, selector: #selector(AppDelegate.kill), name: .NSWorkspaceDidLaunchApplication, object: nil)
 	}
 
 
 	// MARK: - Private
 
-	@objc private func fire() {
-		for app in NSWorkspace.shared().runningApplications {
-			if app.bundleIdentifier == "com.apple.iTunes" {
-				app.terminate()
-			}
-		}
+	private dynamic func kill(notification: Notification) {
+		guard let application = notification.userInfo?[NSWorkspaceApplicationKey] as? NSRunningApplication else { return }
+		guard application.bundleIdentifier == "com.apple.iTunes" else { return }
+		application.forceTerminate()
 	}
 }
