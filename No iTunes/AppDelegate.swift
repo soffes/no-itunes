@@ -8,19 +8,27 @@
 
 import Cocoa
 
-@NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+@NSApplicationMain final class AppDelegate: NSObject, NSApplicationDelegate {
 
+	// MARK: - Properties
 
+	private var timer: Timer?
+
+	// MARK: - NSApplicationDelegate
 
 	func applicationDidFinishLaunching(_ aNotification: Notification) {
-		// Insert code here to initialize your application
-	}
-
-	func applicationWillTerminate(_ aNotification: Notification) {
-		// Insert code here to tear down your application
+		timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
+		fire()
 	}
 
 
+	// MARK: - Private
+
+	@objc private func fire() {
+		for app in NSWorkspace.shared().runningApplications {
+			if app.bundleIdentifier == "com.apple.iTunes" {
+				app.terminate()
+			}
+		}
+	}
 }
-
