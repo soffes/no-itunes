@@ -10,18 +10,20 @@ import Cocoa
 
 class ViewController: NSViewController {
 
+	private var timer: Timer?
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 
-		// Do any additional setup after loading the view.
+		timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(fire), userInfo: nil, repeats: true)
+		fire()
 	}
 
-	override var representedObject: Any? {
-		didSet {
-		// Update the view, if already loaded.
+	@objc private func fire() {
+		for app in NSWorkspace.shared().runningApplications {
+			if app.bundleIdentifier == "com.apple.iTunes" {
+				app.terminate()
+			}
 		}
 	}
-
-
 }
-
