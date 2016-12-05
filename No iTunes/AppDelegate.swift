@@ -6,13 +6,14 @@
 //  Copyright © 2016 Sam Soffes. All rights reserved.
 //
 
-import Cocoa
+import AppKit
 
 @NSApplicationMain final class AppDelegate: NSObject, NSApplicationDelegate {
 
 	// MARK: - Properties
 
 	private var timer: Timer?
+
 
 	// MARK: - NSApplicationDelegate
 
